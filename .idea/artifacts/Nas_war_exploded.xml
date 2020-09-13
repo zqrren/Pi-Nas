@@ -23,6 +23,7 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-web:5.2.8.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.2.8.RELEASE" />
           <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.73" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.6" />
         </element>
       </element>
     </root>

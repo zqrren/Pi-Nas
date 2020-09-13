@@ -5,11 +5,6 @@ $(function (){
             data:{"path":path},
             dataType:"json",
             success:function (data){
-                console.log(data);
-                if (data===null){
-                    download(path);
-                    return;
-                }
                 // 导航
                 let paths = path.split(/(?:\\+|\/)/);
                 $("#crumb").empty();
@@ -35,7 +30,13 @@ $(function (){
                 $.each(data, function (i,row){
                     let tr = "";
                     let repPath = row.path.replaceAll("\\","\\\\");
-                    let a = "<a href='#' onclick='refresh(\""+repPath+"\")'>"
+                    let a = "";
+                    if (!row.dir){
+                        a = "<a href='/download?path="+encodeURI(row.path)+"'>";
+                    }
+                    else {
+                        a = "<a href='#' onclick='refresh(\""+repPath+"\")'>"
+                    }
                     tr+="<td>"+a+row.name+"</a>"+"</td>";
                     if (row.dir){
                         row.size = '-';
@@ -75,11 +76,5 @@ $(function (){
             result = fileSize + 'B'
         }
         return result;
-    }
-    download = function (path){
-        $.post({
-            url:"/download",
-            data:{"path":path}
-        })
     }
 })

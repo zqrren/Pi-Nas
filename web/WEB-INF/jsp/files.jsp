@@ -12,6 +12,7 @@
     <script src="${pageContext.request.contextPath}/statics/script/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/statics/script/myScript.js"></script>
 </head>
+<a href="${pageContext.request.contextPath}/download?path=Z%3a%5cMy_Files%5c11.txt">as</a>
 <body>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb" id="crumb">
