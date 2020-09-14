@@ -10,29 +10,41 @@
     <script src="${pageContext.request.contextPath}/statics/script/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/statics/script/popper.min.js"></script>
     <script src="${pageContext.request.contextPath}/statics/script/bootstrap.min.js"></script>
-    <script src="${pageContext.request.contextPath}/statics/script/myScript.js"></script>
+    <script src="${pageContext.request.contextPath}/statics/script/myScript1.js"></script>
 </head>
-<a href="${pageContext.request.contextPath}/download?path=Z%3a%5cMy_Files%5c11.txt">as</a>
 <body>
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb" id="crumb">
-    </ol>
-</nav>
-<table class="table table-hover">
-    <thead class="thead-light">
-    <tr>
-        <th scope="col">文件名</th>
-        <th scope="col">大小</th>
-        <th scope="col">上次修改日期</th>
-    </tr>
-    </thead>
-    <tbody id="tBody">
-        <tr>
-            <td><a href='#' onclick='refresh("Z:\\My_Files")'>init</a></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+    <div class="row no-gutters" style="height: 45px">
+        <div class="col" >
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" id="crumb">
+                </ol>
+            </nav>
+        </div>
+        <div class="col-md-auto"></div>
+        <div class="col-2">
+            <div class="btn-group" role="group" style="width: 185px;height: 45px">
+                <button type="button" class="btn btn-primary btn-lg" style="font-size: 15px">上传</button>
+                <button type="button" onclick="findChecked()" class="btn btn-success btn-lg" id="downloadBtn" style="font-size: 15px">下载</button>
+            </div>
+        </div>
+    </div>
+    <div class="row no-gutters">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">文件名</th>
+                        <th scope="col">大小</th>
+                        <th scope="col">上次修改日期</th>
+                    </tr>
+                </thead>
+                <tbody id="tBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

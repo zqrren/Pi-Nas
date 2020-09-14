@@ -46,6 +46,7 @@ public class FileController {
 
     @RequestMapping("/download")
     public String download (String path, HttpServletResponse response) throws IOException {
+        System.out.println(path);
         String name = Paths.get(path).getFileName().toString();
         path = Paths.get(path).getParent().toString();
         response.reset();

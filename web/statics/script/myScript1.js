@@ -28,16 +28,17 @@ $(function (){
                 // 清空表格内容
                 $("#tBody").empty();
                 $.each(data, function (i,row){
-                    let tr = "";
                     let repPath = row.path.replaceAll("\\","\\\\");
-                    let a = "";
+                    let tr = "";
+                    tr += "<td><div class=\"form-check\"><input class=\"form-check-input\" type=\"checkbox\" value=\"\" id=\"defaultCheck1\" path='"+repPath+"'></div></td>"
                     if (!row.dir){
-                        a = "<a href='/download?path="+encodeURI(row.path)+"'>";
+                        // a = "<a href='/download?path="+encodeURI(row.path)+"'>";
+                        tr+="<td>"+row.name+"</td>";
                     }
                     else {
-                        a = "<a href='#' onclick='refresh(\""+repPath+"\")'>"
+                        let a = "<a href='#' onclick='refresh(\""+repPath+"\")'>";
+                        tr+="<td>"+a+row.name+"</a>"+"</td>";
                     }
-                    tr+="<td>"+a+row.name+"</a>"+"</td>";
                     if (row.dir){
                         row.size = '-';
                         row.date = '-';
@@ -77,4 +78,18 @@ $(function (){
         }
         return result;
     }
+    findChecked = function (){
+        let downloadList = [];
+        $("#tBody input[type=checkbox]:checked").each(function (){
+            downloadList.push($(this).attr('path'));
+        })
+        console.log(downloadList)
+        let url = encodeURI("/download?path="+JSON.stringify(downloadList));
+        $(".container").append("<a id='temp' href='"+url+"'>");
+        $("#temp")[0].click();
+        $("#temp").remove();
+    }
 })
+$(document).ready(function init(){
+    refresh("Z:\\My_Files")
+});
