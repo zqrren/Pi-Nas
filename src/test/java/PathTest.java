@@ -16,4 +16,9 @@ public class PathTest {
             System.out.println(file1.getName()+ new Date(file1.lastModified()));
         }
     }
+    @Test
+    public void test2(){
+        Path path = Paths.get("Z:\\My_Files");
+        System.out.println(path.getParent().toString());
+    }
 }

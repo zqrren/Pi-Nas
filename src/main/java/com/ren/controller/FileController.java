@@ -35,6 +35,11 @@ import java.util.zip.ZipOutputStream;
 @Controller
 public class FileController {
     private final FileService fileService = new FileServiceImpl();
+    @RequestMapping("/getSEPARATOR")
+    @ResponseBody
+    public String getSEPARATOR () {
+        return File.separator;
+    }
 
     @RequestMapping("/file")
     @ResponseBody

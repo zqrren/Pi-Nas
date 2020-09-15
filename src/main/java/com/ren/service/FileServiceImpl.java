@@ -42,6 +42,7 @@ public class FileServiceImpl implements FileService{
 
     @Override
     public String getParent (String path) {
+        System.out.println(path);
         return Paths.get(path).getParent().toString();
     }
 }

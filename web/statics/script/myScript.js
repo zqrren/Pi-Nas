@@ -1,21 +1,40 @@
 $(function (){
-    refresh = function (path){
+    refresh = function (name){
+        let SEPARATOR = getSEPARATOR();
+        let path = $("#nowPath").text();
+        if (name === ".."){
+            const regex = /.*(?=\\)/gm;
+            path = regex.exec(path)[0];
+        }
+        if (name && name !== ".."){
+            path += SEPARATOR + name;
+        }
+        console.log((name+"").indexOf("\\"))
+        if ((name+"").indexOf("\\")!==-1){
+            path = name;
+        }
         $.post({
             url:"/file",
             data:{"path":path},
             dataType:"json",
             success:function (data){
                 // 导航
-                let paths = path.split(/(?:\\+|\/)/);
+                // let paths = path.split(/(?:\\+|\/)/);
+                let paths = path.split(SEPARATOR);
+                console.log(paths)
                 $("#crumb").empty();
                 $.each(paths,function (i,p){
                     let repPath = "";
                     for (let j = 0;j<=i;j++){
-                        repPath+=paths[j]+"\\\\";
+                        repPath+=paths[j];
+                        if (j!=i){
+                            repPath+=SEPARATOR.replace("\\","\\\\")
+                        }
                     }
                     let li = "";
                     if (i===paths.length-1){
                         li += "<li class=\"breadcrumb-item active\" aria-current=\"page\">"+p+"</li>";
+                        li += "<span hidden id='nowPath'>"+path+"</span>";
                     }
                     else {
                         li += "<li class=\"breadcrumb-item\">";
@@ -28,15 +47,13 @@ $(function (){
                 // 清空表格内容
                 $("#tBody").empty();
                 $.each(data, function (i,row){
-                    let repPath = row.path.replaceAll("\\","\\\\");
                     let tr = "";
-                    tr += "<td><div class=\"form-check\"><input class=\"form-check-input\" type=\"checkbox\" value=\"\" id=\"defaultCheck1\" path='"+repPath+"'></div></td>"
+                    tr += "<td><div class=\"form-check\"><input class=\"form-check-input\" type=\"checkbox\" value=\"\" id=\"defaultCheck1\" path='"+row.path+"'></div></td>"
                     if (!row.dir){
-                        // a = "<a href='/download?path="+encodeURI(row.path)+"'>";
                         tr+="<td>"+row.name+"</td>";
                     }
                     else {
-                        let a = "<a href='#' onclick='refresh(\""+repPath+"\")'>";
+                        let a = "<a href='#' onclick='refresh(\""+row.name+"\")'>";
                         tr+="<td>"+a+row.name+"</a>"+"</td>";
                     }
                     if (row.dir){
@@ -59,9 +76,9 @@ $(function (){
         let Y = date.getFullYear() + '-';
         let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
         let D = (date.getDate()<10?'0'+date.getDate():date.getDate()) + ' ';
-        let h = date.getHours() + ':';
-        let m = date.getMinutes() + ':';
-        let s = date.getSeconds();
+        let h = (date.getHours()<10?'0'+date.getHours():date.getHours())  + ':';
+        let m = (date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes())  + ':';
+        let s = (date.getSeconds()<10?'0'+date.getSeconds():date.getSeconds())
         return Y+M+D+h+m+s;
     }
     function sizeFormat(bytes){
@@ -78,7 +95,19 @@ $(function (){
         }
         return result;
     }
-    findChecked = function (){
+    function getSEPARATOR(){
+        let SEPARATOR = "";
+        $.post({
+            url: "/getSEPARATOR",
+            async: false,
+            success: function (data){
+                SEPARATOR = data;
+            }
+        })
+        console.log(SEPARATOR)
+        return SEPARATOR;
+    }
+    download = function (){
         let downloadList = [];
         $("#tBody input[type=checkbox]:checked").each(function (){
             downloadList.push($(this).attr('path'));
@@ -91,5 +120,5 @@ $(function (){
     }
 })
 $(document).ready(function init(){
-    refresh("Z:\\My_Files")
+    refresh()
 });
