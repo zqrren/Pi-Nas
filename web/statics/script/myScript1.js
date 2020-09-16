@@ -9,7 +9,6 @@ $(function (){
         if (name && name !== ".."){
             path += SEPARATOR + name;
         }
-        console.log((name+"").indexOf("\\"))
         if ((name+"").indexOf("\\")!==-1){
             path = name;
         }
@@ -21,7 +20,6 @@ $(function (){
                 // 导航
                 // let paths = path.split(/(?:\\+|\/)/);
                 let paths = path.split(SEPARATOR);
-                console.log(paths)
                 $("#crumb").empty();
                 $.each(paths,function (i,p){
                     let repPath = "";
@@ -104,7 +102,6 @@ $(function (){
                 SEPARATOR = data;
             }
         })
-        console.log(SEPARATOR)
         return SEPARATOR;
     }
     download = function (){
@@ -112,11 +109,33 @@ $(function (){
         $("#tBody input[type=checkbox]:checked").each(function (){
             downloadList.push($(this).attr('path'));
         })
-        console.log(downloadList)
+        if (downloadList.length===0){
+            return;
+        }
         let url = encodeURI("/download?path="+JSON.stringify(downloadList));
         $(".container").append("<a id='temp' href='"+url+"'>");
         $("#temp")[0].click();
         $("#temp").remove();
+    }
+    upload = function (){
+        $("#file").click();
+    }
+    uploadFileChanged = function (){
+        let path = $("#nowPath").text();
+        let param = $("#pathParam");
+        if (param.children().length===0){
+            param.append("<input name='path' value='"+path+"'/>");
+        }
+        let data = new FormData($("#fileForm")[0]);
+        $.post({
+            url:"/upload",
+            data: data,
+            contentType: false,
+            processData: false,
+            success:function (){
+                refresh(path)
+            }
+        })
     }
 })
 $(document).ready(function init(){

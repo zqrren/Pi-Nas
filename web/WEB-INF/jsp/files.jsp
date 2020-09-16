@@ -10,7 +10,7 @@
     <script src="${pageContext.request.contextPath}/statics/script/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/statics/script/popper.min.js"></script>
     <script src="${pageContext.request.contextPath}/statics/script/bootstrap.min.js"></script>
-    <script src="${pageContext.request.contextPath}/statics/script/myScript.js"></script>
+    <script src="${pageContext.request.contextPath}/statics/script/myScript1.js"></script>
 </head>
 <body>
 <div class="container">
@@ -25,6 +25,10 @@
         <div class="col-md-auto"></div>
         <div class="col-2">
             <div class="btn-group" role="group" style="width: 185px;height: 45px">
+                <form hidden enctype="multipart/form-data" id="fileForm">
+                    <input type="file" name="uploadFiles" id="file" multiple onchange="uploadFileChanged()">
+                    <div id="pathParam"></div>
+                </form>
                 <button type="button" onclick="upload()" class="btn btn-primary btn-lg" style="font-size: 15px">上传</button>
                 <button type="button" onclick="download()" class="btn btn-success btn-lg" id="downloadBtn" style="font-size: 15px">下载</button>
             </div>
