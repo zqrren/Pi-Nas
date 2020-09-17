@@ -96,7 +96,7 @@ public class FileController {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public void upload (@RequestParam(value = "uploadFiles",required=false) MultipartFile[] files,@RequestParam(value="path")String path) throws IOException {
+    public String upload (@RequestParam(value = "uploadFiles",required=false) MultipartFile[] files,@RequestParam(value="path")String path,@RequestParam(value="isDir")boolean isDir) throws IOException {
         for (MultipartFile file : files) {
             String name = file.getOriginalFilename();
             InputStream is = file.getInputStream();
@@ -109,6 +109,44 @@ public class FileController {
             fos.close();
             is.close();
         }
+        return "ok";
+    }
 
+    @RequestMapping("/delete")
+    @ResponseBody
+    public String delete(String path){
+        List<String> array = JSON.parseArray(path, String.class);
+        System.out.println(array);
+        for (String s : array) {
+            File file = Paths.get(s).toFile();
+            if (file.isDirectory()){
+                deleteDir(file);
+            }
+            else {
+                file.delete();
+            }
+        }
+        return "ok";
+    }
+
+    private void deleteDir(File dir){
+        File[] files = dir.listFiles();
+        assert files != null;
+        for (File file : files) {
+            if (file.isDirectory()) {
+                deleteDir(file);
+            } else {
+                boolean b = file.delete();
+                System.out.println(file.getName() + " " + b);
+            }
+        }
+        dir.delete();
+    }
+    @RequestMapping("/mkdir")
+    @ResponseBody
+    public String mkdir(String path,String name){
+        File file = Paths.get(path+File.separator+name).toFile();
+        boolean b = file.mkdirs();
+        return "ok";
     }
 }

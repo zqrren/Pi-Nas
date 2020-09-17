@@ -46,7 +46,12 @@ $(function (){
                 $("#tBody").empty();
                 $.each(data, function (i,row){
                     let tr = "";
-                    tr += "<td><div class=\"form-check\"><input class=\"form-check-input\" type=\"checkbox\" value=\"\" id=\"defaultCheck1\" path='"+row.path+"'></div></td>"
+                    if (row.name!==".."){
+                        tr += "<td><div class=\"form-check\"><input class=\"form-check-input\" type=\"checkbox\" value=\"\" id=\"defaultCheck1\" path='"+row.path+"'></div></td>"
+                    }
+                    else {
+                        tr += "<td></td>"
+                    }
                     if (!row.dir){
                         tr+="<td>"+row.name+"</td>";
                     }
@@ -118,22 +123,64 @@ $(function (){
         $("#temp").remove();
     }
     upload = function (){
+        $("#fileForm").append("<input type=\"file\" name=\"uploadFiles\" id=\"file\" multiple onchange=\"uploadFileChanged(false)\">")
         $("#file").click();
     }
-    uploadFileChanged = function (){
+    uploadFolder = function (){
+        $("#fileForm").append("<input type=\"file\" name=\"uploadFiles\" id=\"fileFolder\" webkitdirectory directory onchange=\"uploadFileChanged(true)\">")
+        $("#fileFolder").click();
+    }
+    uploadFileChanged = function (isDir){
         let path = $("#nowPath").text();
         let param = $("#pathParam");
-        if (param.children().length===0){
-            param.append("<input name='path' value='"+path+"'/>");
-        }
+        param.append("<input id='filePath' name='path' value='"+path+"'/>");
+        param.append("<input id='isDir' name='isDir' value='"+isDir+"'/>");
         let data = new FormData($("#fileForm")[0]);
+        console.log($("#fileForm")[0])
         $.post({
             url:"/upload",
             data: data,
             contentType: false,
             processData: false,
             success:function (){
+                $("#file").remove();
+                $("#fileFolder").remove();
+                $("#filePath").remove();
+                $("#isDir").remove();
                 refresh(path)
+            },
+            error: function (){
+                $("#file").remove();
+                $("#fileFolder").remove();
+                $("#filePath").remove();
+                $("#isDir").remove();
+            }
+        })
+    }
+    _delete = function (){
+        let deleteList = [];
+        $("#tBody input[type=checkbox]:checked").each(function (){
+            deleteList.push($(this).attr('path'));
+        })
+        if (deleteList.length===0){
+            return;
+        }
+        $.post({
+            url: "/delete",
+            data: {"path":JSON.stringify(deleteList)},
+            success: function (){
+                refresh($("#nowPath").text())
+            }
+        })
+    }
+    _mkdir = function (){
+        let path = $("#nowPath").text();
+        let name = $("#mkdirName").val();
+        $.post({
+            url: "/mkdir",
+            data: {"path":path,"name":name},
+            success: function (){
+                refresh($("#nowPath").text())
             }
         })
     }

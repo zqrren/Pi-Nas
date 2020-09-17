@@ -22,15 +22,33 @@
                 </ol>
             </nav>
         </div>
-        <div class="col-md-auto"></div>
-        <div class="col-2">
-            <div class="btn-group" role="group" style="width: 185px;height: 45px">
+        <div class="col-md-auto">
+            <div class="btn-group" role="group" style="height: 45px">
                 <form hidden enctype="multipart/form-data" id="fileForm">
-                    <input type="file" name="uploadFiles" id="file" multiple onchange="uploadFileChanged()">
                     <div id="pathParam"></div>
                 </form>
-                <button type="button" onclick="upload()" class="btn btn-primary btn-lg" style="font-size: 15px">上传</button>
-                <button type="button" onclick="download()" class="btn btn-success btn-lg" id="downloadBtn" style="font-size: 15px">下载</button>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">新建</button>
+                    <div class="dropdown-menu" style="width: 17rem">
+                        <div class="input-group" style="width: 15rem;margin: 0 1rem">
+                            <input type="text" class="form-control" id="mkdirName" placeholder="请输入文件夹名称">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="mkdirBtn" onclick="_mkdir()">新建</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">上传</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" onclick="upload()">上传文件</a>
+                        <a class="dropdown-item" href="#" onclick="uploadFolder()">上传文件夹（未完善）</a>
+                    </div>
+                </div>
+                <button type="button" onclick="download()" class="btn btn-success btn-lg" id="downloadBtn" style="font-size: 1rem;">下载</button>
+                <button type="button" onclick="_delete()" class="btn btn-danger btn-lg" id="deleteBtn" style="font-size: 1rem;">删除</button>
+<%--                <button type="button" onclick="_mkdir()" class="btn btn-secondary btn-lg" id="mkdirBtn" style="font-size: 1rem;">新建文件夹</button>--%>
+
             </div>
         </div>
     </div>
