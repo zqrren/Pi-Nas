@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -96,15 +94,15 @@ public class FileController {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public String upload (@RequestParam(value = "uploadFiles",required=false) MultipartFile[] files,@RequestParam(value="path")String path,@RequestParam(value="isDir")boolean isDir) throws IOException {
+    public String upload (@RequestParam(value = "uploadFiles", required = false) MultipartFile[] files, @RequestParam(value = "path") String path, @RequestParam(value = "isDir") boolean isDir) throws IOException {
         for (MultipartFile file : files) {
             String name = file.getOriginalFilename();
             InputStream is = file.getInputStream();
-            FileOutputStream fos = new FileOutputStream(Paths.get(path+File.separator+name).toFile());
+            FileOutputStream fos = new FileOutputStream(Paths.get(path + File.separator + name).toFile());
             int len = 0;
             byte[] buffer = new byte[1024];
-            while ((len = is.read(buffer))!=-1){
-                fos.write(buffer,0,len);
+            while ((len = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len);
             }
             fos.close();
             is.close();
@@ -114,22 +112,20 @@ public class FileController {
 
     @RequestMapping("/delete")
     @ResponseBody
-    public String delete(String path){
+    public String delete (String path) {
         List<String> array = JSON.parseArray(path, String.class);
-        System.out.println(array);
         for (String s : array) {
             File file = Paths.get(s).toFile();
-            if (file.isDirectory()){
+            if (file.isDirectory()) {
                 deleteDir(file);
-            }
-            else {
+            } else {
                 file.delete();
             }
         }
         return "ok";
     }
 
-    private void deleteDir(File dir){
+    private void deleteDir (File dir) {
         File[] files = dir.listFiles();
         assert files != null;
         for (File file : files) {
@@ -142,10 +138,11 @@ public class FileController {
         }
         dir.delete();
     }
+
     @RequestMapping("/mkdir")
     @ResponseBody
-    public String mkdir(String path,String name){
-        File file = Paths.get(path+File.separator+name).toFile();
+    public String mkdir (String path, String name) {
+        File file = Paths.get(path + File.separator + name).toFile();
         boolean b = file.mkdirs();
         return "ok";
     }
